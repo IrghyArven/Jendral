@@ -1,0 +1,163 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#082b21">
+<meta name="description" content="JENDERAL — game kartu Indonesia 4 pemain melawan 3 AI dengan 4 tingkat kesulitan.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%230f5a40'/%3E%3Ctext x='16' y='23' font-size='20' text-anchor='middle' fill='%23f2c14e' font-family='sans-serif' font-weight='700'%3EJ%3C/text%3E%3C/svg%3E">
+<title>JENDERAL — Game Kartu</title>
+<link rel="stylesheet" href="src/styles/main.css">
+</head>
+<body>
+<main id="app" data-anim="full">
+  <section id="screen-menu" class="screen active">
+    <h1 class="logo">JENDERAL</h1>
+    <p class="sub">Game kartu 4 pemain · 54 kartu · 3 lawan AI</p>
+    <div class="suits" aria-hidden="true"><span>♣</span><span class="r">♦</span><span>♠</span><span class="r">♥</span></div>
+    <div class="stack">
+      <button class="btn primary" data-go="new" id="btn-menu-new">Main Baru</button>
+      <button class="btn" data-go="settings">Pengaturan</button>
+      <button class="btn" data-go="stats">Statistik</button>
+      <button class="btn" data-go="guide">Panduan Aturan</button>
+    </div>
+  </section>
+
+  <section id="screen-new" class="screen">
+    <h2>Main Baru</h2>
+    <label class="field">Nama kamu<input id="in-name" maxlength="14" autocomplete="off"></label>
+    <div class="field" role="radiogroup" aria-labelledby="lbl-diff">
+      <span id="lbl-diff">Tingkat kesulitan AI</span>
+      <div class="seg" id="seg-diff">
+        <button type="button" class="segbtn" role="radio" data-diff="easy">Mudah</button>
+        <button type="button" class="segbtn" role="radio" data-diff="normal">Normal</button>
+        <button type="button" class="segbtn" role="radio" data-diff="hard">Sulit</button>
+        <button type="button" class="segbtn" role="radio" data-diff="expert">Ahli</button>
+      </div>
+      <p class="hint left" id="diff-info"></p>
+    </div>
+    <label class="check"><input type="checkbox" id="in-perai"> Atur tiap AI secara terpisah</label>
+    <div id="ai-config" class="aicfg"></div>
+    <label class="field">Seed acak (opsional, angka)<input id="in-seed" inputmode="numeric" placeholder="kosong = acak"></label>
+    <div class="stack">
+      <button class="btn primary" id="btn-start">Mulai</button>
+      <button class="btn" data-go="menu">Kembali</button>
+    </div>
+  </section>
+
+  <section id="screen-settings" class="screen">
+    <h2>Pengaturan</h2>
+    <label class="field">Animasi
+      <select data-setting="anim"><option value="full">Penuh</option><option value="reduced">Dikurangi</option><option value="off">Mati</option></select>
+    </label>
+    <label class="field">Kecepatan AI
+      <select data-setting="speed"><option value="slow">Lambat</option><option value="normal">Normal</option><option value="fast">Cepat</option></select>
+    </label>
+    <label class="check"><input type="checkbox" data-setting="hints"> Redupkan kartu yang tidak bisa dimainkan</label>
+    <label class="check"><input type="checkbox" data-setting="sound"> Efek suara</label>
+    <label class="field">Volume <input type="range" min="0" max="100" step="5" data-setting="volume" aria-label="Volume"></label>
+    <div class="stack"><button class="btn primary" data-go="menu" id="btn-settings-back">Kembali</button></div>
+  </section>
+
+  <section id="screen-guide" class="screen">
+    <h2>Panduan Aturan</h2>
+    <div class="rules">
+      <ul>
+        <li>4 pemain, 54 kartu (52 + 2 Joker), dibagi 14/14/13/13. Urutan kartu: 3 &lt; 4 … &lt; K &lt; A &lt; 2.</li>
+        <li>Pemegang 3♣ memulai dengan 3♣ tunggal.</li>
+        <li>Kombinasi: Tunggal, Tris, Tris Gandengan (tris + pasangan lebih rendah), Tangga (≥3 berurutan, jumlah kartu sama saat membalas), Tris tekor satu (2 kartu sama + Joker).</li>
+        <li>Joker hanya mengalahkan kartu tunggal berwarna sama.</li>
+        <li>JENDERAL: setelah Joker tunggal dimainkan, pemain lain yang punya empat kartu sama boleh memainkannya dan langsung memenangkan pertandingan.</li>
+        <li>Jika semua pemain lain lewat, pemain terakhir yang bermain memimpin lagi (atau pemain aktif berikutnya bila ia sudah habis).</li>
+        <li>Yang kartunya habis lebih dulu menang; pemain terakhir yang tersisa kalah.</li>
+        <li>Tingkat AI: Mudah, Normal, Sulit, Ahli — memengaruhi kualitas keputusan AI, bukan aturan permainan.</li>
+      </ul>
+    </div>
+    <div class="stack"><button class="btn primary" data-go="menu">Kembali</button></div>
+  </section>
+
+  <section id="screen-game" class="screen">
+    <header class="topbar">
+      <button class="btn small" id="btn-pause" aria-label="Jeda">⏸ Jeda</button>
+      <div id="status" role="status" aria-live="polite"></div>
+    </header>
+    <div class="table">
+      <div class="seat seat-top" id="seat-2"></div>
+      <div class="seat seat-left" id="seat-1"></div>
+      <div class="seat seat-right" id="seat-3"></div>
+      <div id="jen-chip" class="jen-chip closed" data-testid="jen-chip">Jenderal: tertutup</div>
+      <div class="center">
+        <div id="table-label" class="table-label"></div>
+        <div id="table-cards" class="cards-row"></div>
+      </div>
+    </div>
+    <div class="you" id="seat-0">
+      <div id="you-info" class="you-info"></div>
+      <div id="hand" class="hand"></div>
+      <div class="actions">
+        <button class="btn" id="btn-pass">Lewat</button>
+        <button class="btn" id="btn-clear">Batal</button>
+        <button class="btn primary" id="btn-play">Main</button>
+      </div>
+    </div>
+  </section>
+
+  <section id="screen-results" class="screen">
+    <div id="res-confetti" class="confetti-host" aria-hidden="true"></div>
+    <h2 id="res-title"></h2>
+    <p id="res-sub" class="sub"></p>
+    <ol id="res-list" class="placing"></ol>
+    <h3 class="h3">Statistik pertandingan</h3>
+    <div class="tablewrap"><table id="res-stats" class="mstats"></table></div>
+    <div class="stack">
+      <button class="btn primary" id="btn-again">Rematch</button>
+      <button class="btn" data-go="stats">Statistik Total</button>
+      <button class="btn" id="btn-menu-results">Menu Utama</button>
+    </div>
+  </section>
+
+  <section id="screen-stats" class="screen">
+    <h2>Statistik</h2>
+    <p class="hint">Disimpan hanya di perangkat ini (localStorage). Tidak ada data yang dikirim ke mana pun.</p>
+    <dl id="stats-list" class="stats"></dl>
+    <div class="stack">
+      <button class="btn" id="btn-reset-stats">Reset Statistik</button>
+      <button class="btn primary" data-go="menu">Kembali</button>
+    </div>
+  </section>
+
+  <div id="overlay-pause" class="overlay hidden">
+    <div class="modal">
+      <h2>Jeda</h2>
+      <label class="field">Animasi
+        <select data-setting="anim"><option value="full">Penuh</option><option value="reduced">Dikurangi</option><option value="off">Mati</option></select>
+      </label>
+      <label class="field">Kecepatan AI
+        <select data-setting="speed"><option value="slow">Lambat</option><option value="normal">Normal</option><option value="fast">Cepat</option></select>
+      </label>
+      <label class="check"><input type="checkbox" data-setting="hints"> Redupkan kartu yang tidak bisa dimainkan</label>
+      <label class="check"><input type="checkbox" data-setting="sound"> Efek suara</label>
+      <label class="field">Volume <input type="range" min="0" max="100" step="5" data-setting="volume" aria-label="Volume"></label>
+      <div class="stack">
+        <button class="btn primary" id="btn-resume">Lanjutkan</button>
+        <button class="btn" id="btn-quit">Keluar ke Menu</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="overlay-jenderal" class="overlay hidden">
+    <div class="modal">
+      <h2>Kesempatan JENDERAL!</h2>
+      <p id="jen-text"></p>
+      <div class="stack">
+        <button class="btn primary danger" id="btn-jenderal">JENDERAL!</button>
+        <button class="btn" id="btn-jen-skip">Lewati</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="fx" aria-hidden="true"></div>
+</main>
+<script type="module" src="src/ui/app.js"></script>
+</body>
+</html>
