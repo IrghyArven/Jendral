@@ -52,7 +52,7 @@ Tes memakai halaman `?e2e=1` yang membuka hook kecil `window.__jenderal` (mulai 
 - `scripts/` — `serve`, `build`, `check-dist`, `simulate`, `evaluate-ai`.
 
 ## Aturan yang diimplementasikan
-54 kartu (52 + 2 Joker), dibagi 14/14/13/13; urutan 3<…<K<A<2; pemegang 3♣ membuka dengan 3♣ tunggal; tunggal, Tris, Tris tekor satu (2 kartu + Joker), Tris gandengan (tris + pasangan lebih rendah, 5 kartu), Tangga (≥3 berurutan, tanpa Joker, panjang sama saat membalas); Joker hanya mengalahkan tunggal berwarna sama; Jenderal (4 kartu sama setelah Joker tunggal, langsung menang); Lewat dan reset putaran; urutan selesai dan pemain terakhir kalah. "Pair" berdiri sendiri **tidak** didukung engine (tetap seperti sebelumnya).
+54 kartu (52 + 2 Joker), dibagi 14/14/13/13; urutan 3<…<K<A<2; pemegang 3♣ membuka dengan 3♣ tunggal; tunggal, Tris, Tris tekor satu (2 kartu + Joker), Tris gandengan (tris + pasangan lebih rendah, 5 kartu), Tangga (≥3 berurutan, tanpa Joker, panjang sama saat membalas); **Tunggal hanya bisa ditindih kartu satu suit (♣/♦/♥/♠) yang nilainya lebih tinggi** (suit lock, hanya selama satu putaran; pemimpin putaran baru bebas memilih suit); Joker hanya mengalahkan tunggal berwarna sama; Jenderal (4 kartu sama setelah Joker tunggal, langsung menang); Lewat dan reset putaran; urutan selesai dan pemain terakhir kalah. "Pair" berdiri sendiri **tidak** didukung engine (tetap seperti sebelumnya).
 
 ## Asumsi aturan (belum terkonfirmasi, tidak diubah)
 Semua ada di `src/core/rules.js` dan `src/core/general.js`.
@@ -61,6 +61,7 @@ Semua ada di `src/core/rules.js` dan `src/core/general.js`.
 3. **Panjang Tangga saat memimpin**: bebas ≥3; saat membalas harus sama. Tangga tidak melewati `2`.
 4. **Banyak kombinasi dalam satu giliran**: tidak didukung.
 5. **Siapa boleh Jenderal**: default `anyOtherPlayer` (setiap pemain lain yang memegang empat kartu sama, berurutan). Alternatif: `nextPlayerOnly`.
+- **Suit lock hanya untuk Tunggal.** Tunggal biasa wajib satu suit persis dan nilai lebih tinggi (beda suit, nilai sama, atau lebih rendah ditolak). Tris, Tris gandengan, dan Tangga tetap dibandingkan tanpa syarat suit (nilai tris / kartu tertinggi, Tangga dengan panjang sama). Kunci suit berakhir ketika semua pemain lain Lewat dan putaran direset.
 - Joker tidak bisa menimpa Joker (hanya Jenderal). Joker mengalahkan tunggal berwarna sama berapa pun angkanya, termasuk 2. Tris tekor memakai Joker warna apa pun.
 - Pemain boleh Lewat meski sebenarnya bisa main; pemimpin putaran tidak boleh Lewat. Pemain yang Lewat tidak ikut lagi sampai putaran selesai.
 
@@ -98,6 +99,7 @@ Selain peringkat, harness mengukur per 100 keputusan: Joker dibuang sia-sia, pem
 MIT (lihat `LICENSE`).
 
 ## Catatan perubahan
+- **Perbaikan suit lock Tunggal**: `beats()` kini mensyaratkan suit yang sama untuk tunggal biasa; `legalPlays()`, validasi engine, dan AI memakai aturan yang sama; `unseenBeaters` (AI) menghitung hanya penindih yang benar-benar legal. Tes lama yang memakai kartu lintas suit disesuaikan fixture-nya; ditambah `tests/single-suit-lock.test.js`.
 - **1.1.0**: 4 tingkat kesulitan AI + pengaturan per AI, UI/UX lengkap (menu, pengaturan, panduan, animasi, indikator Jenderal, layar hasil, rematch), audio opsional, statistik per tingkat, tes AI/UI/browser, workflow dengan tes browser, `check-dist`.
   - Perbaikan: timer hasil pertandingan yang tertunda bisa memunculkan layar hasil / error setelah pemain keluar ke menu atau rematch; aksi ganda dicegah; deret Tangga panjang di tengah meja bisa keluar dari meja.
 - **1.0.x (audit sebelumnya)**: urutan pemeriksaan Jenderal setelah Joker tunggal diperbaiki; penutupan pertandingan saat hanya satu pemain aktif tersisa; tes regresi ditambahkan.

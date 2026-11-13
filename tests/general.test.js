@@ -57,12 +57,12 @@ test('nextPlayerOnly rule variant is honoured', () => {
 
 
 test('final Joker opens Jenderal window before normal end when only one opponent remains', () => {
-  const hands = [['3C'], ['4S', 'JB'], ['9C', '9D', '9H', '9S'], ['6S']];
+  const hands = [['3C'], ['4C', 'JB'], ['9C', '9D', '9H', '9S'], ['6C']];
   const e = engineWith(hands);
   assert.ok(e.play(0, ['3C']).ok);
-  assert.ok(e.play(1, ['4S']).ok);
+  assert.ok(e.play(1, ['4C']).ok);
   assert.ok(e.pass(2).ok);
-  assert.ok(e.play(3, ['6S']).ok); // player 3 finishes
+  assert.ok(e.play(3, ['6C']).ok); // player 3 finishes
   assert.equal(e.tm.current, 1);
   const finalJoker = e.play(1, ['JB']);
   assert.ok(finalJoker.ok);
@@ -76,12 +76,12 @@ test('final Joker opens Jenderal window before normal end when only one opponent
 });
 
 test('declining the final Jenderal chance ends the normal match immediately', () => {
-  const hands = [['3C'], ['4S', 'JB'], ['9C', '9D', '9H', '9S'], ['6S']];
+  const hands = [['3C'], ['4C', 'JB'], ['9C', '9D', '9H', '9S'], ['6C']];
   const e = engineWith(hands);
   e.play(0, ['3C']);
-  e.play(1, ['4S']);
+  e.play(1, ['4C']);
   e.pass(2);
-  e.play(3, ['6S']);
+  e.play(3, ['6C']);
   e.play(1, ['JB']);
   const declined = e.declineGeneral(2);
   assert.ok(declined.ok);

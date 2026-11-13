@@ -127,8 +127,11 @@ test('extreme situations: single-card hands, last-active player, repeated passes
   for (let i = 0; i < 12 && f.phase !== 'over'; i++) { const a = f.actor(); assert.ok(applyAction(f, a, x.decide(f.view(a))).ok); }
 });
 
-test('measured: placement improves with level (strategic ladder, 1200 matches)', () => {
-  const r = runLadder({ seeds: 300, personality: 'strategic' }).levels;
+// Single follows suit, which narrowed the hard->expert gap to ~0.03 places; 300 seeds (1200
+// matches) can no longer resolve it, so this measurement uses 2500 seeds (10000 matches).
+// The assertions stay strict: every level must place strictly better than the one below.
+test('measured: placement improves with level (strategic ladder, 10000 matches)', { timeout: 300000 }, () => {
+  const r = runLadder({ seeds: 2500, personality: 'strategic' }).levels;
   const p = (d) => r[d].avgPlace;
   assert.ok(p('easy') > p('normal'), JSON.stringify(r));
   assert.ok(p('normal') > p('hard'), JSON.stringify(r));

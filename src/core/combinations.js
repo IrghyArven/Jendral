@@ -74,6 +74,7 @@ export function beats(prev, next) {
       const c = next.cards[0];
       if (isJoker(p)) return false; // ordinary cards (and the other Joker) cannot beat a Joker
       if (isJoker(c)) return cardColor(p) === c.joker; // Joker only beats a card of its own colour
+      // Suit lock (Single only): an ordinary card must be the SAME suit and a HIGHER rank.
       return c.suit === p.suit && next.value > prev.value;
     }
     case TYPES.TANGGA:

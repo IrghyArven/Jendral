@@ -49,7 +49,12 @@ export class GameEngine {
       return combo.type === 'single' && combo.cards[0].id === THREE_CLUBS_ID ? null : 'Langkah pertama harus 3♣ tunggal';
     }
     if (this.tm.leading) return null;
-    return beats(this.table.combo, combo) ? null : 'Tidak bisa mengalahkan kartu di meja';
+    if (beats(this.table.combo, combo)) return null;
+    const t = this.table.combo, c = combo;
+    if (t.type === 'single' && c.type === 'single' && !t.joker && !c.joker && t.cards[0].suit !== c.cards[0].suit) {
+      return 'Tunggal harus satu suit dengan kartu di meja dan lebih tinggi';
+    }
+    return 'Tidak bisa mengalahkan kartu di meja';
   }
 
   validatePlay(player, ids) {

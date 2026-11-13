@@ -1,4 +1,5 @@
-import { isJoker, rankValue, cardValue } from '../core/cards.js';
+import { isJoker, rankValue } from '../core/cards.js';
+import { classify, beats } from '../core/combinations.js';
 import { createDeck } from '../core/deck.js';
 
 const ALL_CARDS = createDeck();
@@ -26,11 +27,14 @@ export function breakPenalty(combo, hand) {
 export function opponentCounts(view) {
   return view.handCounts.filter((n, i) => i !== view.player && n > 0);
 }
-/** How many cards that could still beat this single are neither in my hand nor played (public + own info only). */
+/**
+ * How many cards that could still beat this single are neither in my hand nor played (public + own info only).
+ * Mirrors beats(): same suit + higher rank, or a Joker of the same colour as the card (suit lock).
+ */
 export function unseenBeaters(view, combo) {
   if (combo.type !== 'single' || combo.joker) return 0;
   const seen = new Set([...view.hand, ...view.playedCards].map((c) => c.id));
-  return ALL_CARDS.filter((c) => !seen.has(c.id) && (isJoker(c) ? true : cardValue(c) > combo.value)).length;
+  return ALL_CARDS.filter((c) => !seen.has(c.id) && beats(combo, classify([c]))).length;
 }
 export function argmin(items, score) {
   let best = null, bs = Infinity;

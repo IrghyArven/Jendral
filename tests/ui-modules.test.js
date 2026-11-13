@@ -80,8 +80,8 @@ test('audio plays through a fake Web Audio context and honours the master volume
 });
 
 test('match statistics are derived from the public history', () => {
-  const e = engineWith([['3C', '7S', '9S'], ['4D', '8S'], ['5D', '10S'], ['6D', 'JS']]);
-  e.play(0, ['3C']); e.play(1, ['4D']); e.play(2, ['5D']); e.play(3, ['6D']); e.play(0, ['7S']);
+  const e = engineWith([['3C', '7C', '9C'], ['4C', '8C'], ['5C', '10C'], ['6C', 'JC']]);
+  e.play(0, ['3C']); e.play(1, ['4C']); e.play(2, ['5C']); e.play(3, ['6C']); e.play(0, ['7C']);
   e.pass(1); e.pass(2); e.pass(3);
   const s = computeMatchStats(e);
   assert.equal(s.players[0].plays, 2); assert.equal(s.players[1].passes, 1);

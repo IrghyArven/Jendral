@@ -5,20 +5,20 @@ import { playFullMatch } from '../src/ai/simulation.js';
 import { GameEngine } from '../src/core/game-engine.js';
 
 test('players finish in order and the last remaining player loses', () => {
-  const e = engineWith([['3C'], ['4S'], ['5S', '9S'], ['6S', '10S']]);
+  const e = engineWith([['3C'], ['4C'], ['5C', '9C'], ['6C', '10C']]);
   e.play(0, ['3C']);
-  e.play(1, ['4S']);
+  e.play(1, ['4C']);
   assert.deepEqual(e.tm.finished, [0, 1]);
   assert.equal(e.phase, 'playing');
-  e.play(2, ['5S']);
-  e.play(3, ['6S']);
+  e.play(2, ['5C']);
+  e.play(3, ['6C']);
   assert.equal(e.tm.current, 2);
-  e.play(2, ['9S']);
+  e.play(2, ['9C']);
   assert.equal(e.phase, 'over');
   assert.deepEqual(e.result.order, [0, 1, 2, 3]);
   assert.equal(e.result.winner, 0);
   assert.equal(e.result.loser, 3);
-  assert.equal(e.play(3, ['10S']).ok, false);
+  assert.equal(e.play(3, ['10C']).ok, false);
 });
 test('engine rejects bypass attempts', () => {
   const e = new GameEngine({ seed: 5 });
