@@ -4,12 +4,20 @@ import { classify, beats, generateCombos } from '../src/core/combinations.js';
 import { C } from './helpers.js';
 const k = (ids) => classify(C(ids));
 
-test('single comparison by rank (2 highest)', () => {
-  assert.ok(beats(k(['5H']), k(['6C'])));
-  assert.ok(!beats(k(['6C']), k(['5H'])));
+test('single comparison requires same suit and a higher rank', () => {
+  assert.ok(beats(k(['5H']), k(['6H'])));
+  assert.ok(!beats(k(['5H']), k(['6C'])));
+  assert.ok(!beats(k(['6H']), k(['5H'])));
 });
-test('2 beats Ace', () => assert.ok(beats(k(['AS']), k(['2D']))));
-test('equal rank does not beat', () => assert.ok(!beats(k(['5H']), k(['5S']))));
+
+test('2 beats Ace only when suit matches', () => {
+  assert.ok(beats(k(['AH']), k(['2H'])));
+  assert.ok(!beats(k(['AH']), k(['2S'])));
+});
+
+test('equal rank does not beat, even with same suit', () => {
+  assert.ok(!beats(k(['5H']), k(['5H'])));
+});
 test('tris classification and comparison', () => {
   assert.equal(k(['5H', '5C', '5D']).type, 'tris');
   assert.ok(beats(k(['5H', '5C', '5D']), k(['8H', '8C', '8D'])));

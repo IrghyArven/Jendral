@@ -1,0 +1,188 @@
+npm notice run jenderal-card-game@1.1.0 test
+npm notice run node --test
+✔ AIPlayer validates difficulty and personality names (23.850385ms)
+✔ difficulty profiles are genuinely different (not just renamed numbers) (1.884077ms)
+✔ legal and stuck-free: easy x aggressive (30 full matches) (1812.268ms)
+✔ legal and stuck-free: easy x strategic (30 full matches) (1430.337847ms)
+✔ legal and stuck-free: easy x adaptive (30 full matches) (623.270462ms)
+✔ legal and stuck-free: normal x aggressive (30 full matches) (790.038461ms)
+✔ legal and stuck-free: normal x strategic (30 full matches) (493.974462ms)
+✔ legal and stuck-free: normal x adaptive (30 full matches) (286.598538ms)
+✔ legal and stuck-free: hard x aggressive (30 full matches) (334.409539ms)
+✔ legal and stuck-free: hard x strategic (30 full matches) (313.160308ms)
+✔ legal and stuck-free: hard x adaptive (30 full matches) (257.411308ms)
+✔ legal and stuck-free: expert x aggressive (30 full matches) (218.985307ms)
+✔ legal and stuck-free: expert x strategic (30 full matches) (275.810077ms)
+✔ legal and stuck-free: expert x adaptive (30 full matches) (246.899307ms)
+✔ mixed difficulties and personalities at one table stay legal (150 matches) (1081.875077ms)
+✔ levels choose differently on identical positions (Easy/Normal/Hard/Expert not identical) (806.126462ms)
+✔ AI decisions depend only on legal information (hidden opponent cards are irrelevant) (6.671154ms)
+✔ Jenderal chance: Normal+ always takes it, Easy sometimes misses it, never illegal (1.172385ms)
+✔ hand plan estimator and Jenderal risk (public information only) (1.148ms)
+✔ extreme situations: single-card hands, last-active player, repeated passes (2.163693ms)
+✔ measured: placement improves with level (strategic ladder, 1200 matches) (13107.803693ms)
+✔ measured: decision quality (Joker waste, structure breaks, missed finishes) is better at higher levels (16555.297231ms)
+✔ AI aggressive always makes legal moves (validated by the engine) (1997.191077ms)
+✔ AI strategic always makes legal moves (validated by the engine) (1315.907693ms)
+✔ AI adaptive always makes legal moves (validated by the engine) (891.373847ms)
+✔ AI opens with 3 of Clubs when it holds it (2.671461ms)
+✔ AI view never exposes other players hands (1.635308ms)
+✔ AI always declares Jenderal when holding four of a kind and given the chance (6.811462ms)
+✔ single comparison requires same suit and a higher rank (27.416ms)
+✔ 2 beats Ace only when suit matches (4.291ms)
+✔ equal rank does not beat, even with same suit (2.872308ms)
+✔ tris classification and comparison (106.895769ms)
+✔ different combination types never beat each other (6.748ms)
+✔ tris gandengan: triple + LOWER pair, five cards (8.755462ms)
+✔ tris gandengan rejects Joker by default rule (4.566462ms)
+✔ tangga validation: >=3 consecutive, same length, highest rank decides (6.819307ms)
+✔ tangga cannot contain Jokers or wrap through 2 (4.754462ms)
+✔ generateCombos produces only classifiable combos incl. tekor (17.745539ms)
+✔ deck has exactly 54 unique cards incl. 2 jokers (17.836077ms)
+✔ card ranking is 3 < ... < A < 2 (25.347769ms)
+✔ shuffle is deterministic with a seed and keeps all cards (7.504692ms)
+✔ cardFromId rejects garbage (1.708308ms)
+✔ distribution is 14/14/13/13 with all 54 cards unique (163.973846ms)
+✔ holder of 3 of Clubs starts and must open with it as a single (64.316077ms)
+✖ players finish in order and the last remaining player loses (81.611ms)
+✔ engine rejects bypass attempts (151.988ms)
+✔ history records plays and passes (8.505ms)
+✔ 200 complete simulated matches: no loops, no illegal moves, no duplicates (4945.807308ms)
+✔ fourOfKindRanks detects four of a rank (43.555615ms)
+✔ Jenderal interception ends the whole match immediately (178.389847ms)
+✔ Jenderal not available without a Joker single, or without four of a kind (5.978846ms)
+✔ declining Jenderal resumes normal play with the correct player (8.501538ms)
+✔ Tris tekor with Joker does not open a Jenderal window (18.645923ms)
+✔ nextPlayerOnly rule variant is honoured (6.818769ms)
+✖ final Joker opens Jenderal window before normal end when only one opponent remains (138.757769ms)
+✖ declining the final Jenderal chance ends the normal match immediately (10.475769ms)
+✔ red Joker beats red single only; black Joker beats black single only (32.598154ms)
+✔ ordinary cards and the other Joker cannot beat a Joker (4.405461ms)
+✔ tris tekor satu: two of a rank + Joker (either colour) (142.404615ms)
+✔ turn passes to next player and enforces ownership (52.830846ms)
+✔ leader cannot pass; others can; trick resets to last player (3.065847ms)
+✖ a player who passed stays out until the trick resets (35.671307ms)
+✔ if the last player already finished, lead goes to next active player (22.645846ms)
+✔ settings: defaults, sanitising of corrupt/hostile stored data, persistence (71.896923ms)
+✔ seatConfig: one level for all AIs, or a separate level per AI (1.722077ms)
+✔ scoreboard: wins, Jenderal results, per-difficulty buckets, corrupt storage, reset (2.576615ms)
+✔ audio is optional: silent no-op without Web Audio, respects mute and volume (10.133538ms)
+✔ audio plays through a fake Web Audio context and honours the master volume (18.539692ms)
+✖ match statistics are derived from the public history (61.099769ms)
+ℹ tests 69
+ℹ suites 0
+ℹ pass 64
+ℹ fail 5
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 40465.923926
+
+✖ failing tests:
+
+test at tests/game-flow.test.js:7:1
+✖ players finish in order and the last remaining player loses (81.611ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:
+  + actual - expected
+  
+    [
+      0,
+  -   1
+    ]
+  
+      at TestContext.<anonymous> (file:///data/data/com.termux/files/home/Jendral-upload/jenderal/tests/game-flow.test.js:11:10)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1402:25)
+      at Test.start (node:internal/test_runner/test:1262:17)
+      at startSubtestAfterBootstrap (node:internal/test_runner/harness:387:17) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: [ 0 ],
+    expected: [ 0, 1 ],
+    operator: 'deepStrictEqual',
+    diff: 'simple'
+  }
+
+test at tests/general.test.js:59:1
+✖ final Joker opens Jenderal window before normal end when only one opponent remains (138.757769ms)
+  AssertionError [ERR_ASSERTION]: The expression evaluated to a falsy value:
+  
+    assert.ok(e.play(1, ['4S']).ok)
+  
+      at TestContext.<anonymous> (file:///data/data/com.termux/files/home/Jendral-upload/jenderal/tests/general.test.js:63:10)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1402:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:974:18)
+      at Test.postRun (node:internal/test_runner/test:1542:19)
+      at Test.run (node:internal/test_runner/test:1467:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: '==',
+    diff: 'simple'
+  }
+
+test at tests/general.test.js:78:1
+✖ declining the final Jenderal chance ends the normal match immediately (10.475769ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  false !== true
+  
+      at TestContext.<anonymous> (file:///data/data/com.termux/files/home/Jendral-upload/jenderal/tests/general.test.js:88:10)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1402:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:974:18)
+      at Test.postRun (node:internal/test_runner/test:1542:19)
+      at Test.run (node:internal/test_runner/test:1467:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at tests/turn-manager.test.js:27:1
+✖ a player who passed stays out until the trick resets (35.671307ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  2 !== 3
+  
+      at TestContext.<anonymous> (file:///data/data/com.termux/files/home/Jendral-upload/jenderal/tests/turn-manager.test.js:32:10)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1402:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:974:18)
+      at Test.postRun (node:internal/test_runner/test:1542:19)
+      at Test.run (node:internal/test_runner/test:1467:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 2,
+    expected: 3,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at tests/ui-modules.test.js:82:1
+✖ match statistics are derived from the public history (61.099769ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  1 !== 2
+  
+      at TestContext.<anonymous> (file:///data/data/com.termux/files/home/Jendral-upload/jenderal/tests/ui-modules.test.js:87:10)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1402:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:974:18)
+      at Test.postRun (node:internal/test_runner/test:1542:19)
+      at Test.run (node:internal/test_runner/test:1467:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 1,
+    expected: 2,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
