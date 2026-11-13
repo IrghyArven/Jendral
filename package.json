@@ -1,0 +1,19 @@
+{
+  "name": "jenderal-card-game",
+  "version": "1.1.0",
+  "description": "JENDERAL - game kartu Indonesia 4 pemain (1 manusia + 3 AI, 4 tingkat kesulitan) untuk browser",
+  "type": "module",
+  "private": true,
+  "license": "MIT",
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "test": "node --test",
+    "simulate": "node scripts/simulate.mjs 500",
+    "evaluate:ai": "node scripts/evaluate-ai.mjs 300 all",
+    "start": "node scripts/serve.mjs",
+    "build": "node scripts/build.mjs && node scripts/check-dist.mjs",
+    "test:e2e": "node e2e/run.mjs"
+  }
+}
